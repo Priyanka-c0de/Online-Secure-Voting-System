@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        {% load static %}
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>e-matadanam</title>
+        <link rel="stylesheet" href="{% static '/index.css' %}" />
+        <link rel="stylesheet" href="{% static '/votes.css' %}" />
+    </head>
+    <body>
+        <div class="flexWrapper">
+            {% csrf_token %} {% include 'navbar.html' %}
+            <div class="winnerBox">
+                <h1 style="font-weight: bold">Winner!</h1>
+                <div class="candidate">
+                    <img height="100" src="{{ winner.photo.url }}" alt="" />
+                    <p>{{ winner.name }}</p>
+                    <p>{{ winner.votes }}</p>
+                </div>
+            </div>
+            <div class="bgBox">
+                {% for id, candidate in candidates %}
+                <div class="candidate">
+                    <img height="100" src="{{ candidate.photo.url }}" alt="" />
+                    <p>{{ candidate.name }}</p>
+                    <p>{{ candidate.votes }}</p>
+                </div>
+                {% endfor %}
+            </div>
+            <p id="footer">
+                © Copyright 2025. All rights reserved with Election Commission
+                of India
+            </p>
+        </div>
+    </body>
+</html>

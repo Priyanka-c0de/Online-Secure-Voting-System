@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        {% load static %}
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>e-matadanam</title>
+        <link rel="stylesheet" href="{% static '/index.css' %}" />
+    </head>
+    <body>
+        <div class="flexWrapper">
+            {% include 'navbar.html' %}
+            <div class="bgBox">
+                <div class="content">
+                    <h1>Purpose of e-matadanam</h1>
+                    <div class="points">
+                        <h2>
+                            > To eliminate paper in the voting process. This
+                            involves sending of notices and ballot papers and
+                            receiving the said ballot votes.
+                        </h2>
+                        <h2>
+                            > Facilitate electronic voting on resolutions of
+                            companies in a fair and transparent manner for all
+                            classes of security/stakeholders.
+                        </h2>
+                        <h2>
+                            > Enable security holders to vote at a time and
+                            place of their convenience.
+                        </h2>
+                        <h2>
+                            > Eliminate postal and other natural delays which
+                            cause a hindrance to postal ballot.
+                        </h2>
+                        <h2>
+                            > Increase shareholder participation in shareholder
+                            meetings.
+                        </h2>
+                    </div>
+                    <p id="justify">
+                        The e-Voting platform aims to improve transparency and
+                        Corporate Governance standards and also helps in
+                        reducing the administrative cost associated with Postal
+                        Ballot while facilitating declaration of results
+                        immediately after the close of the voting. Additionally
+                        investors are also benefited where they can cast their
+                        votes on till last day from the comfort of their home /
+                        office, while eliminating the chances of their votes
+                        being declared invalid.
+                    </p>
+                </div>
+                <div class="buttons">
+                    <button onclick="location.href = '/vote';" class="btnVote">
+                        <span>
+                            <img src="{% static 'svg/votecast.svg' %}" alt="" />
+                        </span>
+                        <h2>Cast Your Vote</h2>
+                    </button>
+                    <button
+                        onclick="location.href = '/results';"
+                        class="btnView"
+                    >
+                        <span>
+                            <img src="{% static 'svg/results.svg' %}" alt="" />
+                        </span>
+                        <h2>View Election Results</h2>
+                    </button>
+                </div>
+            </div>
+            <p id="footer">
+                © Copyright 2025. All rights reserved with Election Commission
+                of India
+            </p>
+        </div>
+    </body>
+</html>

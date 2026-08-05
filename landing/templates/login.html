@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        {% load static %}
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>e-matadanam</title>
+        <link rel="stylesheet" href="{% static '/index.css' %}" />
+        <style>
+            .bgBox {
+                flex-direction: column;
+                align-items: center;
+                justify-content: space-evenly;
+            }
+
+            button {
+                background-color: #57468b;
+                border: none;
+                color: #f9f9f9;
+                padding: 0.75rem 1.5rem;
+                border-radius: 6px;
+                font-size: 1rem;
+                cursor: pointer;
+                transition: background-color 0.2s ease;
+            }
+
+            form {
+                display: flex;
+                width: 30%;
+                flex-direction: column;
+                gap: 10px;
+                justify-content: center;
+            }
+            input {
+                display: flex;
+                width: 100%;
+                flex-direction: column;
+                gap: 5px;
+                height: 2rem;
+                border-radius: 0.5rem;
+                border: 1px solid black;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="flexWrapper">
+            {% include 'navbar.html' %}
+            <div class="bgBox">
+                <h1>Login</h1>
+                <form method="post">
+                    {% csrf_token %} {{ form.as_p }}
+                    <button type="submit">Login</button>
+                </form>
+            </div>
+            <p id="footer">
+                © Copyright 2025. All rights reserved with Election Commission
+                of India
+            </p>
+        </div>
+    </body>
+</html>

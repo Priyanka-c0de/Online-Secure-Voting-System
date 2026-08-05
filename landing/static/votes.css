@@ -1,0 +1,68 @@
+.flexWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 1rem;
+}
+
+.bgBox {
+    display: grid;
+    grid-template-columns: 40% 40%;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.candidate {
+    background-color: #f9f9f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.candidate:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.candidate img {
+    border-radius: calc(1rem - 8px);
+    object-fit: cover;
+}
+
+.candidate p {
+    flex: 1;
+    margin: 0;
+    font-size: 1rem;
+    color: #333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-left: 1rem;
+    white-space: nowrap;
+}
+
+.candidate button {
+    background-color: #57468b;
+    border: none;
+    color: #f9f9f9;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.candidate button:hover,
+.candidate button:focus {
+    background-color: #6a57a3;
+}
+
+.winnerBox {
+    width: 40%;
+    align-self: center;
+}

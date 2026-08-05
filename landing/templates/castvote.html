@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        {% load static %}
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>e-matadanam</title>
+        <link rel="stylesheet" href="{% static '/index.css' %}" />
+        <link rel="stylesheet" href="{% static '/votes.css' %}" />
+    </head>
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== "") {
+                const cookies = document.cookie.split(";");
+                for (let cookie of cookies) {
+                    cookie = cookie.trim();
+                    if (cookie.startsWith(name + "=")) {
+                        cookieValue = decodeURIComponent(
+                            cookie.slice(name.length + 1),
+                        );
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        function vote(id) {
+            const request = new XMLHttpRequest();
+            request.open("POST", "", true);
+            request.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
+            request.setRequestHeader("Content-Type", "application/json");
+            request.send(
+                JSON.stringify({
+                    Candidate: id,
+                }),
+            );
+        }
+    </script>
+    <body>
+        <div class="flexWrapper">
+            {% csrf_token %} {% include 'navbar.html' %}
+            <div class="bgBox">
+                {% if user.voters.casted_vote or not user.is_authenticated %}
+                <h1>Already Voted!</h1>
+                {% else %} {% for id, candidate in candidates %}
+                <div class="candidate">
+                    <img height="100" src="{{ candidate.photo.url }}" alt="" />
+                    <p>{{ candidate.name }}</p>
+                    <button onclick="vote({{ id }})">Vote</button>
+                </div>
+                {% endfor %} {% endif %}
+            </div>
+            <p id="footer">
+                © Copyright 2025. All rights reserved with Election Commission
+                of India
+            </p>
+        </div>
+    </body>
+</html>

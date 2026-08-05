@@ -1,0 +1,141 @@
+@import url("https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap");
+
+body {
+    background-color: #f9f9f9;
+    font-family: "Noto Sans";
+    display: flex;
+    margin: 0;
+    border: 0;
+    min-height: 100vh;
+    min-width: 100vw;
+    justify-content: center;
+    align-items: center;
+}
+
+h1 {
+    font-size: 24px;
+}
+
+h2 {
+    font-size: 14px;
+}
+
+.flexWrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 95vh;
+    justify-content: space-between;
+    width: 75%;
+}
+
+.topContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.banner {
+    display: flex;
+    width: 98%;
+    align-self: center;
+    justify-content: space-between;
+}
+
+.mainEmblem,
+.ecinet {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+nav {
+    display: flex;
+    background-color: #57468b;
+    justify-content: space-between;
+    padding: 20px;
+    margin-top: 10px;
+    border-radius: 14px;
+    box-shadow: 2px 4px 6px 1px rgba(0, 0, 0, 0.31);
+}
+
+nav a {
+    text-decoration: none;
+    color: white;
+}
+
+nav p {
+    color: white;
+    margin: 0;
+}
+
+.mainNav a {
+    padding: 16px;
+}
+
+.userSpace {
+    display: flex;
+    gap: 32px;
+}
+
+.welcome {
+    display: flex;
+    gap: 10px;
+}
+
+.navLogin,
+.navLogout,
+.navRegister {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.bgBox {
+    background-color: #ebebeb;
+    border-top: 16px solid #29136c;
+    padding: 32px;
+    display: flex;
+    min-height: 40vh;
+    gap: 5vh;
+    justify-content: space-between;
+    box-shadow: 2px 4px 6px 1px rgba(0, 0, 0, 0.31);
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 62%;
+}
+
+#justify {
+    text-align: justify;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 3vh;
+    margin-top: 8vh;
+}
+
+.btnVote,
+.btnView {
+    display: flex;
+    align-items: center;
+    background-color: #f9f9f9;
+    border: 2px solid black;
+    width: 20vw;
+    height: 6vh;
+    border-radius: 20px;
+    padding-left: 3vw;
+    cursor: pointer;
+}
+
+button span {
+    padding-right: 20px;
+}
+
+#footer {
+    font-weight: bold;
+    text-align: center;
+}

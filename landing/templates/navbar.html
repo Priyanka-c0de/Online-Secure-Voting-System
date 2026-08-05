@@ -1,0 +1,42 @@
+{% load static %}
+<div class="topContainer">
+    <div class="banner">
+        <div class="mainEmblem">
+            <img src="{% static 'svg/emblemLogo.svg' %}" alt="" />
+            <img src="{% static 'svg/electioncommission.png' %}" alt="" />
+        </div>
+        <div class="ecinet">
+            <img src="{% static 'svg/ecinet.png' %}" alt="" />
+            <h1>ECINet</h1>
+        </div>
+    </div>
+    <nav>
+        <div class="mainNav">
+            <a href="/">Home</a>
+            <a href="">About Us</a>
+            <a href="">Services</a>
+            <a href="">Terms Of Use</a>
+        </div>
+        <div class="userSpace">
+            {% if user.is_authenticated %}
+            <div class="welcome">
+                <p>Welcome</p>
+                <p style="font-weight: bold">{{ user.voter.name }}</p>
+            </div>
+            <div class="navLogout">
+                <img src="{% static 'svg/logout.svg' %}" alt="" />
+                <a href="/logout">Logout</a>
+            </div>
+            {% else %}
+            <div class="navLogin">
+                <img src="{% static 'svg/login.svg' %}" alt="" />
+                <a href="/login">Login</a>
+            </div>
+            <div class="navRegister">
+                <img src="{% static 'svg/register.svg' %}" alt="" />
+                <a href="/register">Register</a>
+            </div>
+            {% endif %}
+        </div>
+    </nav>
+</div>
