@@ -1,4 +1,3 @@
 Django
-psycopg2
 pyzbar
 lxml

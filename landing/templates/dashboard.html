@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Election Dashboard</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 40px;
+            background: #f4f6f8;
+        }
+
+        h1 {
+            text-align: center;
+            color: #0b4ea2;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, .15);
+        }
+
+        .card h2 {
+            margin: 0;
+            color: #0b4ea2;
+        }
+
+        .winner {
+            margin-top: 35px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, .15);
+        }
+
+        table {
+            width: 100%;
+            margin-top: 30px;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        table th,
+        table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+
+        table th {
+            background: #0b4ea2;
+            color: white;
+        }
+
+        canvas {
+            margin-top: 40px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Election Analytics Dashboard</h1>
+
+    <div class="cards">
+
+        <div class="card">
+            <h2>Total Voters</h2>
+            <h1>{{ total_voters }}</h1>
+        </div>
+
+        <div class="card">
+            <h2>Votes Cast</h2>
+            <h1>{{ voted }}</h1>
+        </div>
+
+        <div class="card">
+            <h2>Pending</h2>
+            <h1>{{ pending }}</h1>
+        </div>
+
+        <div class="card">
+            <h2>Turnout</h2>
+            <h1>{{ turnout }}%</h1>
+        </div>
+
+    </div>
+
+    {% if winner %}
+    <div class="winner">
+        <h2>🏆 Current Leader</h2>
+
+        <img src="{{ winner.photo.url }}" width="150">
+
+        <h2>{{ winner.name }}</h2>
+
+        <h3>{{ winner.votes }} Votes</h3>
+
+    </div>
+    {% endif %}
+
+    <table>
+
+        <tr>
+
+            <th>Candidate</th>
+
+            <th>Votes</th>
+
+        </tr>
+
+        {% for candidate in candidates %}
+
+        <tr>
+
+            <td>{{ candidate.name }}</td>
+
+            <td>{{ candidate.votes }}</td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    <canvas id="voteChart"></canvas>
+
+    <script>
+
+        const ctx = document.getElementById('voteChart');
+
+        new Chart(ctx, {
+            type: 'bar',
+
+            data: {
+                labels: [
+                    {% for candidate in candidates %}
+'{{candidate.name}}',
+{% endfor %}
+],
+
+            datasets: [{
+
+                label: 'Votes',
+
+                data: [
+                    {% for candidate in candidates %}
+{{candidate.votes}},
+            {% endfor %}
+        ]
+
+}]
+}
+
+});
+
+    </script>
+
+</body>
+
+</html>
