@@ -1,178 +1,171 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
+    <head>
+        {% load static %}
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Analytics Dashboard — e-Matadanam</title>
+        <link rel="stylesheet" href="{% static '/index.css' %}" />
+        <link rel="stylesheet" href="{% static '/votes.css' %}" />
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </head>
+    <body>
+        <div class="flexWrapper">
+            {% include 'navbar.html' %}
 
-<head>
-    <title>Election Dashboard</title>
+            <div class="page-head">
+                <div>
+                    <h1>Election Analytics Dashboard</h1>
+                    <p>Live overview of voter participation and candidate standings.</p>
+                </div>
+            </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-top">
+                        <span class="kpi-label">Total Voters</span>
+                        <span class="kpi-ic">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        </span>
+                    </div>
+                    <div class="kpi-value">{{ total_voters }}</div>
+                </div>
 
-    <style>
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            margin: 40px;
-            background: #f4f6f8;
-        }
+                <div class="kpi-card accent-green">
+                    <div class="kpi-top">
+                        <span class="kpi-label">Votes Cast</span>
+                        <span class="kpi-ic">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                        </span>
+                    </div>
+                    <div class="kpi-value">{{ voted }}</div>
+                </div>
 
-        h1 {
-            text-align: center;
-            color: #0b4ea2;
-        }
+                <div class="kpi-card accent-muted">
+                    <div class="kpi-top">
+                        <span class="kpi-label">Pending Votes</span>
+                        <span class="kpi-ic">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                        </span>
+                    </div>
+                    <div class="kpi-value">{{ pending }}</div>
+                </div>
 
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-        }
+                <div class="kpi-card accent-saffron">
+                    <div class="kpi-top">
+                        <span class="kpi-label">Turnout</span>
+                        <span class="kpi-ic">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 3 5-6"/></svg>
+                        </span>
+                    </div>
+                    <div class="kpi-value">{{ turnout }}<small>%</small></div>
+                </div>
+            </div>
 
-        .card {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, .15);
-        }
+            <div class="dash-grid">
+                {% if winner %}
+                <div class="dash-card leader-card">
+                    <h2>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c9700d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg>
+                        Current Leader
+                    </h2>
+                    <div class="l-photo">
+                        <img src="{{ winner.photo.url }}" alt="{{ winner.name }}" />
+                    </div>
+                    <p class="l-name">{{ winner.name }}</p>
+                    <span class="l-votes">
+                        <span class="n">{{ winner.votes }}</span>
+                        <span class="t">Votes</span>
+                    </span>
+                </div>
+                {% endif %}
 
-        .card h2 {
-            margin: 0;
-            color: #0b4ea2;
-        }
+                <div class="dash-card">
+                    <h2>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="10" width="3" height="7"/><rect x="12" y="6" width="3" height="11"/><rect x="17" y="13" width="3" height="4"/></svg>
+                        Candidate Vote Comparison
+                    </h2>
+                    <div class="chart-wrap">
+                        <canvas id="voteChart"></canvas>
+                    </div>
+                </div>
+            </div>
 
-        .winner {
-            margin-top: 35px;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, .15);
-        }
+            <div class="dash-card dash-table-card">
+                <h2>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h18v18H3zM3 9h18M3 15h18M9 3v18"/></svg>
+                    Detailed Breakdown
+                </h2>
+                <table class="dash-table">
+                    <thead>
+                        <tr>
+                            <th>Candidate</th>
+                            <th>Votes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for candidate in candidates %}
+                        <tr>
+                            <td>{{ candidate.name }}</td>
+                            <td><span class="votes-pill">{{ candidate.votes }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
 
-        table {
-            width: 100%;
-            margin-top: 30px;
-            border-collapse: collapse;
-            background: white;
-        }
-
-        table th,
-        table td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: center;
-        }
-
-        table th {
-            background: #0b4ea2;
-            color: white;
-        }
-
-        canvas {
-            margin-top: 40px;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-        }
-    </style>
-</head>
-
-<body>
-
-    <h1>Election Analytics Dashboard</h1>
-
-    <div class="cards">
-
-        <div class="card">
-            <h2>Total Voters</h2>
-            <h1>{{ total_voters }}</h1>
+            <p id="footer">
+                <span class="foot-strip"></span>
+                © Copyright 2025. All rights reserved with Election Commission
+                of India
+            </p>
         </div>
 
-        <div class="card">
-            <h2>Votes Cast</h2>
-            <h1>{{ voted }}</h1>
-        </div>
+        <script>
+            const ctx = document.getElementById("voteChart");
 
-        <div class="card">
-            <h2>Pending</h2>
-            <h1>{{ pending }}</h1>
-        </div>
-
-        <div class="card">
-            <h2>Turnout</h2>
-            <h1>{{ turnout }}%</h1>
-        </div>
-
-    </div>
-
-    {% if winner %}
-    <div class="winner">
-        <h2>🏆 Current Leader</h2>
-
-        <img src="{{ winner.photo.url }}" width="150">
-
-        <h2>{{ winner.name }}</h2>
-
-        <h3>{{ winner.votes }} Votes</h3>
-
-    </div>
-    {% endif %}
-
-    <table>
-
-        <tr>
-
-            <th>Candidate</th>
-
-            <th>Votes</th>
-
-        </tr>
-
-        {% for candidate in candidates %}
-
-        <tr>
-
-            <td>{{ candidate.name }}</td>
-
-            <td>{{ candidate.votes }}</td>
-
-        </tr>
-
-        {% endfor %}
-
-    </table>
-
-    <canvas id="voteChart"></canvas>
-
-    <script>
-
-        const ctx = document.getElementById('voteChart');
-
-        new Chart(ctx, {
-            type: 'bar',
-
-            data: {
-                labels: [
-                    {% for candidate in candidates %}
-'{{candidate.name}}',
-{% endfor %}
-],
-
-            datasets: [{
-
-                label: 'Votes',
-
-                data: [
-                    {% for candidate in candidates %}
-{{candidate.votes}},
-            {% endfor %}
-        ]
-
-}]
-}
-
-});
-
-    </script>
-
-</body>
-
+            new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: [
+                        {% for candidate in candidates %}
+                        "{{ candidate.name }}",
+                        {% endfor %}
+                    ],
+                    datasets: [
+                        {
+                            label: "Votes",
+                            data: [
+                                {% for candidate in candidates %}
+                                {{ candidate.votes }},
+                                {% endfor %}
+                            ],
+                            backgroundColor: "#0d2f6b",
+                            hoverBackgroundColor: "#ff9933",
+                            borderRadius: 8,
+                            maxBarThickness: 64,
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { precision: 0, color: "#5b6a86" },
+                            grid: { color: "#e6ecf6" },
+                        },
+                        x: {
+                            ticks: { color: "#182338" },
+                            grid: { display: false },
+                        },
+                    },
+                },
+            });
+        </script>
+    </body>
 </html>
