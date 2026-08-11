@@ -4,92 +4,91 @@
         {% load static %}
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>e-matadanam</title>
+        <title>Voter Registration — e-Matadanam</title>
         <link rel="stylesheet" href="{% static '/index.css' %}" />
-        <style>
-            .bgBox {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .fields {
-                display: flex;
-                flex-direction: column;
-                gap: 20px;
-                justify-content: center;
-            }
-
-            button {
-                background-color: #57468b;
-                border: none;
-                color: #f9f9f9;
-                padding: 0.75rem 1.5rem;
-                border-radius: 6px;
-                font-size: 1rem;
-                cursor: pointer;
-                transition: background-color 0.2s ease;
-            }
-
-            input {
-                height: 2rem;
-                border-radius: 0.5rem;
-                border: 1px solid black;
-            }
-
-            .email,
-            .password {
-                display: flex;
-                flex-direction: column;
-                gap: 5px;
-            }
-        </style>
     </head>
     <body>
         <div class="flexWrapper">
             {% include 'navbar.html' %}
-            <div class="bgBox">
-                <h1>Register</h1>
-                <form method="post">
-                    {% csrf_token %}
-
-                    <div id="reader" style="width: 600px"></div>
-                    <script src="https://unpkg.com/html5-qrcode"></script>
-                    <script>
-                        function onScanSuccess(decodedText, decodedResult) {
-                            document.getElementById("qr_data").value =
-                                decodedText;
-                            alert("QR Code Scanned! Now enter your password.");
-                            html5QrcodeScanner.clear();
-                        }
-
-                        var html5QrcodeScanner = new Html5QrcodeScanner(
-                            "reader",
-                            {
-                                fps: 10,
-                                qrbox: 250,
-                            },
-                        );
-                        html5QrcodeScanner.render(onScanSuccess);
-                    </script>
-
-                    <input type="hidden" name="qr_data" id="qr_data" />
-
-                    <div class="fields">
-                        <div class="email">
-                            <label>Email</label>
-                            <input type="email" name="email" required />
-                        </div>
-
-                        <div class="password">
-                            <label>Password</label>
-                            <input type="password" name="password" required />
-                        </div>
-
-                        <button type="submit">Register</button>
+            <div class="auth-wrap">
+                <div class="auth-card wide">
+                    <div class="auth-head">
+                        <span class="lock">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3zM21 14v7M14 21h7"/></svg>
+                            QR Verified Registration
+                        </span>
+                        <h1>Voter Registration</h1>
+                        <p>Scan your official ID QR code, then set your account credentials to complete enrolment.</p>
                     </div>
-                </form>
+                    <div class="auth-body">
+                        <form method="post">
+                            {% csrf_token %}
+
+                            <p class="scanner-hint">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                                Position your ID card QR code inside the frame below. Once scanned, enter your email and password.
+                            </p>
+
+                            <div class="scanner-box">
+                                <div id="reader"></div>
+                            </div>
+                            <script src="https://unpkg.com/html5-qrcode"></script>
+                            <script>
+                                function onScanSuccess(decodedText, decodedResult) {
+                                    document.getElementById("qr_data").value =
+                                        decodedText;
+                                    alert("QR Code Scanned! Now enter your password.");
+                                    html5QrcodeScanner.clear();
+                                }
+
+                                var html5QrcodeScanner = new Html5QrcodeScanner(
+                                    "reader",
+                                    {
+                                        fps: 10,
+                                        qrbox: 250,
+                                    },
+                                );
+                                html5QrcodeScanner.render(onScanSuccess);
+                            </script>
+
+                            <input type="hidden" name="qr_data" id="qr_data" />
+
+                            {% if form.non_field_errors %}
+                            <ul class="errorlist">
+                                {% for error in form.non_field_errors %}
+                                <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                            {% if form.qr_data.errors %}
+                            <ul class="errorlist">
+                                {% for error in form.qr_data.errors %}
+                                <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+
+                            <div class="field">
+                                <label for="reg-email">Email</label>
+                                <input type="email" id="reg-email" name="email" required />
+                            </div>
+
+                            <div class="field">
+                                <label for="reg-password">Password</label>
+                                <input type="password" id="reg-password" name="password" required />
+                            </div>
+
+                            <button type="submit" class="btn btn-block">Register</button>
+                        </form>
+                        <p class="auth-alt">
+                            Already registered?
+                            <a href="/login">Login to your account</a>
+                        </p>
+                    </div>
+                </div>
             </div>
             <p id="footer">
+                <span class="foot-strip"></span>
                 © Copyright 2025. All rights reserved with Election Commission
                 of India
             </p>
