@@ -1,0 +1,11 @@
+modules = ["web", "python-3.12"]
+
+run = "python manage.py runserver 0.0.0.0:8000"
+
+[nix]
+channel = "stable-25_05"
+packages = ["xcodebuild", "zbar", "zlib"]
+
+[[ports]]
+localPort = 8000
+externalPort = 80

@@ -1,4 +1,5 @@
 Django
-psycopg2
+Pillow
 pyzbar
 lxml
+gunicorn

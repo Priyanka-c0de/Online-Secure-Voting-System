@@ -1,68 +1,553 @@
-.flexWrapper {
+/* ==========================================================
+   e-Matadanam — Voting / Results / Dashboard styles
+   Depends on the design tokens defined in index.css
+   ========================================================== */
+
+/* ---------- Candidate grid (voting page) ---------- */
+
+.vote-intro {
     display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    padding: 1rem;
+    align-items: center;
+    gap: 12px;
+    background: rgba(19, 136, 8, 0.08);
+    border: 1px solid rgba(19, 136, 8, 0.25);
+    color: #0f6b06;
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-size: 0.92rem;
+    font-weight: 600;
 }
 
-.bgBox {
+.vote-intro svg {
+    flex-shrink: 0;
+}
+
+.candidateGrid {
     display: grid;
-    grid-template-columns: 40% 40%;
-    justify-content: center;
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 22px;
 }
 
 .candidate {
-    background-color: #f9f9f9;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    padding: 1rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    box-shadow: var(--shadow-sm);
     transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+        transform 0.18s ease,
+        box-shadow 0.18s ease,
+        border-color 0.18s ease;
 }
 
 .candidate:hover {
     transform: translateY(-4px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--shadow-md);
+    border-color: #c3d2ee;
 }
 
-.candidate img {
-    border-radius: calc(1rem - 8px);
+.candidate .avatar {
+    width: 112px;
+    height: 112px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid var(--surface-alt);
+    box-shadow: 0 0 0 2px var(--border);
+    margin-bottom: 14px;
+    background: var(--surface-alt);
+}
+
+.candidate .avatar img {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
 }
 
-.candidate p {
-    flex: 1;
-    margin: 0;
-    font-size: 1rem;
-    color: #333;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding-left: 1rem;
-    white-space: nowrap;
+.candidate .cand-name {
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    font-size: 1.12rem;
+    color: var(--navy);
+    margin: 0 0 4px;
 }
 
-.candidate button {
-    background-color: #57468b;
+.candidate .cand-role {
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0 0 16px;
+}
+
+.candidate .vote-btn {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--navy);
     border: none;
-    color: #f9f9f9;
-    padding: 0.75rem 1.5rem;
-    border-radius: 6px;
-    font-size: 1rem;
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-family: "Poppins", sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition:
+        background-color 0.18s ease,
+        transform 0.16s ease;
 }
 
-.candidate button:hover,
-.candidate button:focus {
-    background-color: #6a57a3;
+.candidate .vote-btn:hover,
+.candidate .vote-btn:focus {
+    background: var(--saffron);
+    color: var(--navy-dark);
+    transform: translateY(-1px);
 }
+
+/* ---------- Empty / already voted ---------- */
+
+.empty-state {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 48px 28px;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+}
+
+.empty-state .es-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba(19, 136, 8, 0.12);
+    color: var(--green);
+    margin-bottom: 16px;
+}
+
+.empty-state h1 {
+    margin: 0 0 8px;
+}
+
+.empty-state p {
+    margin: 0;
+    color: var(--muted);
+}
+
+/* ---------- Results ---------- */
 
 .winnerBox {
-    width: 40%;
-    align-self: center;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 60%, var(--navy-light) 100%);
+    border-radius: 20px;
+    padding: 34px 38px;
+    color: #fff;
+    box-shadow: var(--shadow-lg);
+}
+
+.winnerBox::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 85% 20%, rgba(255, 153, 51, 0.28), transparent 46%);
+    pointer-events: none;
+}
+
+.winner-inner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    flex-wrap: wrap;
+}
+
+.winner-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--saffron);
+    color: var(--navy-dark);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 0.74rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 12px;
+}
+
+.winner-photo {
+    width: 108px;
+    height: 108px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid rgba(255, 255, 255, 0.35);
+    flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.winner-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.winner-meta h1 {
+    color: #fff;
+    margin: 0 0 4px;
+    font-size: 2rem;
+}
+
+.winner-meta .w-votes {
+    font-size: 1.05rem;
+    color: rgba(255, 255, 255, 0.86);
+    font-weight: 600;
+}
+
+.winner-meta .w-votes strong {
+    color: var(--saffron);
+}
+
+/* Results ranking list */
+.results-list {
+    display: grid;
+    gap: 14px;
+}
+
+.result-row {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 20px;
+    box-shadow: var(--shadow-sm);
+    transition:
+        transform 0.16s ease,
+        box-shadow 0.16s ease;
+}
+
+.result-row:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.result-row .rank {
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--navy);
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9px;
+    background: var(--surface-alt);
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+.result-row .r-photo {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 2px solid var(--border);
+    background: var(--surface-alt);
+}
+
+.result-row .r-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.result-row .r-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.result-row .r-name {
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    color: var(--navy);
+    margin: 0 0 8px;
+    font-size: 1.02rem;
+}
+
+.result-row .r-bar {
+    height: 9px;
+    width: 100%;
+    background: var(--surface-alt);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.result-row .r-bar span {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--navy) 0%, var(--navy-light) 100%);
+}
+
+.result-row .r-count {
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.result-row .r-count .num {
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: var(--navy);
+    line-height: 1;
+}
+
+.result-row .r-count .lbl {
+    font-size: 0.74rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* ---------- Dashboard ---------- */
+
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 20px;
+}
+
+.kpi-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px 24px;
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+    transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+.kpi-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+
+.kpi-card::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 5px;
+    background: var(--navy);
+}
+
+.kpi-card.accent-saffron::before {
+    background: var(--saffron);
+}
+
+.kpi-card.accent-green::before {
+    background: var(--green);
+}
+
+.kpi-card.accent-muted::before {
+    background: var(--muted);
+}
+
+.kpi-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.kpi-label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+}
+
+.kpi-ic {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 11px;
+    background: rgba(13, 47, 107, 0.08);
+    color: var(--navy);
+}
+
+.kpi-card.accent-saffron .kpi-ic {
+    background: rgba(255, 153, 51, 0.16);
+    color: #c9700d;
+}
+
+.kpi-card.accent-green .kpi-ic {
+    background: rgba(19, 136, 8, 0.14);
+    color: var(--green);
+}
+
+.kpi-value {
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    font-size: 2.1rem;
+    color: var(--navy);
+    line-height: 1;
+}
+
+.kpi-value small {
+    font-size: 1.1rem;
+    color: var(--muted);
+}
+
+.dash-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 22px;
+    align-items: start;
+}
+
+.dash-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 26px;
+    box-shadow: var(--shadow-sm);
+}
+
+.dash-card h2 {
+    margin: 0 0 18px;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.leader-card {
+    text-align: center;
+}
+
+.leader-card .l-photo {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 16px;
+    border: 4px solid var(--surface-alt);
+    box-shadow: 0 0 0 3px var(--saffron);
+    background: var(--surface-alt);
+}
+
+.leader-card .l-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.leader-card .l-name {
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: var(--navy);
+    margin: 0 0 6px;
+}
+
+.leader-card .l-votes {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    background: var(--surface-alt);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 8px 18px;
+}
+
+.leader-card .l-votes .n {
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: var(--green);
+}
+
+.leader-card .l-votes .t {
+    font-size: 0.86rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.chart-wrap {
+    position: relative;
+    height: 320px;
+}
+
+.dash-table-card {
+    grid-column: 1 / -1;
+}
+
+table.dash-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+table.dash-table th,
+table.dash-table td {
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+
+table.dash-table th {
+    background: var(--surface-alt);
+    color: var(--navy);
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+table.dash-table th:last-child,
+table.dash-table td:last-child {
+    text-align: right;
+}
+
+table.dash-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+table.dash-table tbody tr:hover {
+    background: var(--surface-alt);
+}
+
+table.dash-table td .votes-pill {
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    color: var(--navy);
+}
+
+@media (max-width: 860px) {
+    .dash-grid {
+        grid-template-columns: 1fr;
+    }
 }
