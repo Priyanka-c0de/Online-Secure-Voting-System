@@ -4,7 +4,7 @@
         {% load static %}
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>e-matadanam</title>
+        <title>Cast Your Vote — e-Matadanam</title>
         <link rel="stylesheet" href="{% static '/index.css' %}" />
         <link rel="stylesheet" href="{% static '/votes.css' %}" />
     </head>
@@ -40,18 +40,46 @@
     <body>
         <div class="flexWrapper">
             {% csrf_token %} {% include 'navbar.html' %}
-            <div class="bgBox">
-                {% if user.voters.casted_vote or not user.is_authenticated %}
-                <h1>Already Voted!</h1>
-                {% else %} {% for id, candidate in candidates %}
-                <div class="candidate">
-                    <img height="100" src="{{ candidate.photo.url }}" alt="" />
-                    <p>{{ candidate.name }}</p>
-                    <button onclick="vote({{ id }})">Vote</button>
+
+            <div class="page-head">
+                <div>
+                    <h1>Cast Your Vote</h1>
+                    <p>Select one candidate below. Your choice is confidential and can be cast only once.</p>
                 </div>
-                {% endfor %} {% endif %}
             </div>
+
+            {% if user.voters.casted_vote or not user.is_authenticated %}
+            <div class="empty-state">
+                <span class="es-icon">
+                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+                </span>
+                <h1>Already Voted!</h1>
+                <p>Thank you. Your vote has been securely recorded.</p>
+            </div>
+            {% else %}
+            <div class="vote-intro">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                Your ballot is encrypted end-to-end. Choose carefully — a vote cannot be changed once submitted.
+            </div>
+            <div class="candidateGrid">
+                {% for id, candidate in candidates %}
+                <div class="candidate">
+                    <div class="avatar">
+                        <img src="{{ candidate.photo.url }}" alt="{{ candidate.name }}" />
+                    </div>
+                    <p class="cand-name">{{ candidate.name }}</p>
+                    <p class="cand-role">Candidate</p>
+                    <button class="vote-btn" onclick="vote({{ id }})">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                        Vote
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
             <p id="footer">
+                <span class="foot-strip"></span>
                 © Copyright 2025. All rights reserved with Election Commission
                 of India
             </p>
