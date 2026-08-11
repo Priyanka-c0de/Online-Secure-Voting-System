@@ -1,21 +1,30 @@
 {% load static %}
-<div class="topContainer">
+<header class="topContainer">
     <div class="banner">
         <div class="mainEmblem">
-            <img src="{% static 'svg/emblemLogo.svg' %}" alt="" />
-            <img src="{% static 'svg/electioncommission.png' %}" alt="" />
+            <img src="{% static 'svg/emblemLogo.svg' %}" alt="National Emblem of India" />
+            <img src="{% static 'svg/electioncommission.png' %}" alt="Election Commission of India" />
+            <div class="brand-text">
+                <span class="brand-title">e-<span>Matadanam</span></span>
+                <span class="brand-sub">Online Secure Voting System</span>
+            </div>
         </div>
         <div class="ecinet">
-            <img src="{% static 'svg/ecinet.png' %}" alt="" />
-            <h1>ECINet</h1>
+            <img src="{% static 'svg/ecinet.png' %}" alt="ECINet" />
+            <div class="ecinet-text">
+                <span class="eci-name">ECINet</span>
+                <span class="secure-badge">Secure Portal</span>
+            </div>
         </div>
     </div>
-    <nav>
+    <nav aria-label="Primary navigation">
         <div class="mainNav">
             <a href="/">Home</a>
-            <a href="">About Us</a>
-            <a href="">Services</a>
-            <a href="">Terms Of Use</a>
+            {% if user.is_authenticated %}
+            <a href="/vote">Vote</a>
+            <a href="/results">Results</a>
+            <a href="/dashboard">Dashboard</a>
+            {% endif %}
         </div>
         <div class="userSpace">
             {% if user.is_authenticated %}
@@ -39,4 +48,4 @@
             {% endif %}
         </div>
     </nav>
-</div>
+</header>

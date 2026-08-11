@@ -4,31 +4,70 @@
         {% load static %}
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>e-matadanam</title>
+        <title>Election Results — e-Matadanam</title>
         <link rel="stylesheet" href="{% static '/index.css' %}" />
         <link rel="stylesheet" href="{% static '/votes.css' %}" />
     </head>
     <body>
         <div class="flexWrapper">
             {% csrf_token %} {% include 'navbar.html' %}
-            <div class="winnerBox">
-                <h1 style="font-weight: bold">Winner!</h1>
-                <div class="candidate">
-                    <img height="100" src="{{ winner.photo.url }}" alt="" />
-                    <p>{{ winner.name }}</p>
-                    <p>{{ winner.votes }}</p>
+
+            <div class="page-head">
+                <div>
+                    <h1>Election Results</h1>
+                    <p>Official tally of votes cast on the e-Matadanam platform.</p>
                 </div>
             </div>
-            <div class="bgBox">
+
+            {% if winner %}
+            <div class="winnerBox">
+                <div class="winner-inner">
+                    <div class="winner-photo">
+                        <img src="{{ winner.photo.url }}" alt="{{ winner.name }}" />
+                    </div>
+                    <div class="winner-meta">
+                        <span class="winner-badge">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg>
+                            Leading Candidate
+                        </span>
+                        <h1>{{ winner.name }}</h1>
+                        <div class="w-votes"><strong>{{ winner.votes }}</strong> votes secured</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="results-list">
                 {% for id, candidate in candidates %}
-                <div class="candidate">
-                    <img height="100" src="{{ candidate.photo.url }}" alt="" />
-                    <p>{{ candidate.name }}</p>
-                    <p>{{ candidate.votes }}</p>
+                <div class="result-row">
+                    <span class="rank">{{ forloop.counter }}</span>
+                    <div class="r-photo">
+                        <img src="{{ candidate.photo.url }}" alt="{{ candidate.name }}" />
+                    </div>
+                    <div class="r-body">
+                        <p class="r-name">{{ candidate.name }}</p>
+                        <div class="r-bar">
+                            <span style="width: {% widthratio candidate.votes winner.votes 100 %}%"></span>
+                        </div>
+                    </div>
+                    <div class="r-count">
+                        <div class="num">{{ candidate.votes }}</div>
+                        <div class="lbl">Votes</div>
+                    </div>
                 </div>
                 {% endfor %}
             </div>
+            {% else %}
+            <div class="empty-state">
+                <span class="es-icon">
+                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 3 5-6"/></svg>
+                </span>
+                <h1>No Results Yet</h1>
+                <p>Results will appear here once candidates and votes are available.</p>
+            </div>
+            {% endif %}
+
             <p id="footer">
+                <span class="foot-strip"></span>
                 © Copyright 2025. All rights reserved with Election Commission
                 of India
             </p>
