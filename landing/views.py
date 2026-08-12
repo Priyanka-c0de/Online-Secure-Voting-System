@@ -40,12 +40,12 @@ def vote(request):
         else:
             return redirect("login")
     else:
-        if user.voter.casted_vote:
-            return redirect("results")
-        elif user.is_authenticated:
-            return render(request, "castvote.html", {'candidates': [(i.id, i) for i in Candidate.objects.all()]})
-        else:
+        if not user.is_authenticated:
             return redirect("login")
+        elif user.voter.casted_vote:
+            return redirect("results")
+        else:
+            return render(request, "castvote.html", {'candidates': [(i.id, i) for i in Candidate.objects.all()]})
 
 def register(request):
     if request.method == 'POST':
