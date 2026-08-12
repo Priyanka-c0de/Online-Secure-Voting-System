@@ -3,5 +3,6 @@ psycopg2-binary
 pyzbar
 lxml
 dj-database-url
+whitenoise
 Pillow
 gunicorn
