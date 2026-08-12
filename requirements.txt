@@ -4,3 +4,4 @@ pyzbar
 lxml
 dj-database-url
 Pillow
+gunicorn
