@@ -7,6 +7,7 @@ class Voter(models.Model):
     name = models.CharField(max_length=100)
     house = models.CharField()
     dob = models.CharField()
+    aadhaar = models.CharField(max_length=12, unique=True, null=True, blank=True)
     casted_vote = models.BooleanField(default=False)
 
 class Candidate(models.Model):

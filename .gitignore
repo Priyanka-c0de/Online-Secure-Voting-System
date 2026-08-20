@@ -1,1 +1,10 @@
 staticfiles/
+*.pyc
+__pycache__/
+*.backup
+*.before_aadhaar
+*.before_aadhaar_register
+*.before_register_fix
+db.sqlite3.final_backup
+backup_before_sqlite.json
+db.sqlite3.pre_deploy_backup

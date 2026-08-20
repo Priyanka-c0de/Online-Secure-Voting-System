@@ -50,19 +50,55 @@ def vote(request):
 def register(request):
     if request.method == 'POST':
         form = QRRegisterForm(request.POST)
+
         if form.is_valid():
-            xml_data = form.cleaned_data['qr_data']
+            qr_data = form.cleaned_data.get('qr_data')
+            aadhaar = form.cleaned_data.get('aadhaar')
+            name = form.cleaned_data.get('name')
+            dob = form.cleaned_data.get('dob')
+            house = form.cleaned_data.get('house')
             password = form.cleaned_data['password']
             email = form.cleaned_data['email']
 
+            if aadhaar:
+                username = aadhaar
+
+                if User.objects.filter(username=username).exists():
+                    form.add_error(None, "User already exists")
+                    return render(request, 'register.html', {'form': form})
+
+                if Voter.objects.filter(aadhaar=aadhaar).exists():
+                    form.add_error('aadhaar', "This Aadhaar number is already registered")
+                    return render(request, 'register.html', {'form': form})
+
+                user = User.objects.create(
+                    username=username,
+                    email=email,
+                    password=make_password(password),
+                )
+
+                Voter.objects.create(
+                    user=user,
+                    name=name,
+                    house=house or '',
+                    dob=dob or '',
+                    aadhaar=aadhaar
+                )
+
+                return redirect('login')
+
             try:
-                print(xml_data)
-                root = ET.fromstring(xml_data)
+                root = ET.fromstring(qr_data)
                 data = root.attrib
                 username = data["uid"]
 
-                address = ' '.join([data["house" ], data["street"], data["vtc"], data["dist"]])
-                print(root)
+                address = ' '.join([
+                    data.get("house", ""),
+                    data.get("street", ""),
+                    data.get("vtc", ""),
+                    data.get("dist", "")
+                ]).strip()
+
             except Exception:
                 form.add_error('qr_data', 'Invalid QR XML data')
                 return render(request, 'register.html', {'form': form})
@@ -76,13 +112,17 @@ def register(request):
                 email=email,
                 password=make_password(password),
             )
+
             Voter.objects.create(
                 user=user,
-                name=data["name"],
+                name=data.get("name", ""),
                 house=address,
-                dob=data["dob"]
+                dob=data.get("dob", ""),
+                aadhaar=None
             )
-            return redirect('register')
+
+            return redirect('login')
+
     else:
         form = QRRegisterForm()
 
