@@ -32,6 +32,13 @@ DEBUG = os.environ.get("DJANGO_DEBUG", "False").lower() == "true"
 
 ALLOWED_HOSTS = [os.environ.get("RENDER_EXTERNAL_HOSTNAME", "localhost"), "testserver"]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://online-secure-voting-system-yafa.onrender.com",
+]
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+
 
 # Application definition
 
